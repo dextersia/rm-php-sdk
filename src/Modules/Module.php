@@ -53,7 +53,7 @@ class Module
         $signature = base64_encode($signature);
         return $signature;
     }
-    
+
     public function verifySignature($signature, $method, $url, $nonceStr, $timestamp, $base64Payload = null)
     {
         $res = openssl_pkey_get_public($this->rm->getPublicKey());
@@ -69,9 +69,9 @@ class Module
         array_push($arr, "signType=$signType");
         array_push($arr, "timestamp=$timestamp");
 
-       
+
         $result = openssl_verify(join("&", $arr), base64_decode($signature), $res, OPENSSL_ALGO_SHA256);
-        
+
         if (PHP_VERSION_ID < 80000) {
             openssl_free_key($res); // Free key explicitly in older PHP versions
         }

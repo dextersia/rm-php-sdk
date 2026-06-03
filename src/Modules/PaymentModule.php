@@ -2,9 +2,12 @@
 
 namespace RevenueMonster\SDK\Modules;
 
+use RevenueMonster\SDK\Request\DuitnowCheckout;
+use RevenueMonster\SDK\Request\QRCheckout;
 use RevenueMonster\SDK\Request\WebPayment;
 use RevenueMonster\SDK\Request\QRPay;
 use RevenueMonster\SDK\Request\QuickPay;
+use RevenueMonster\SDK\Request\URLCheckout;
 
 class PaymentModule extends Module
 {
@@ -131,8 +134,8 @@ class PaymentModule extends Module
     }
 
     /**
-     * Find transaction by order id
-     * @param string $orderId 
+     * Create Web Payment
+     * @param (array|WebPayment)
      * @return stdClass
      * @throws ApiException
      */
@@ -143,6 +146,50 @@ class PaymentModule extends Module
         }
 
         $uri = $this->getOpenApiUrl('v3', '/payment/online');
+        return $this->mapResponse($this->callApi('post', $uri, $args)->send());
+    }
+
+    /**
+     * Query Payment Checkout
+     * @param string $checkoutId 
+     * @return stdClass
+     * @throws ApiException
+     */
+    public function getWebPayment($checkoutId)
+    {
+        $uri = $this->getOpenApiUrl('v3', '/payment/online?checkoutId=' . $checkoutId);
+        return $this->mapResponse($this->callApi('get', $uri)->send());
+    }
+
+    /**
+     * Create URL Checkout
+     * @param (array|URLCheckout)
+     * @return stdClass
+     * @throws ApiException
+     */
+    public function createURLCheckout($args)
+    {
+        if ($args instanceof URLCheckout) {
+            $args = $args->jsonSerialize();
+        }
+
+        $uri = $this->getOpenApiUrl('v3', '/payment/online/checkout');
+        return $this->mapResponse($this->callApi('post', $uri, $args)->send());
+    }
+
+    /**
+     * Create URL Checkout
+     * @param (array|QRCheckout|DuitnowCheckout)
+     * @return stdClass
+     * @throws ApiException
+     */
+    public function createQRCheckout($args)
+    {
+        if ($args instanceof QRCheckout || $args instanceof DuitnowCheckout) {
+            $args = $args->jsonSerialize();
+        }
+
+        $uri = $this->getOpenApiUrl('v3', '/payment/online/checkout');
         return $this->mapResponse($this->callApi('post', $uri, $args)->send());
     }
 }
