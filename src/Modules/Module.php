@@ -67,7 +67,6 @@ class Module
         array_push($arr, "signType=$signType");
         array_push($arr, "timestamp=$timestamp");
 
-
         $result = openssl_verify(join("&", $arr), base64_decode($signature), $res, OPENSSL_ALGO_SHA256);
         openssl_free_key($res);
 

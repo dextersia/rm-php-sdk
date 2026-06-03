@@ -43,6 +43,18 @@ class TokenizedCustomerModule extends Module
         return $this->mapResponse($this->callApi('post', $uri, $args)->send());
     }
 
+    /**
+     * Get customer by ID
+     * @param string $customerId
+     * @return stdClass
+     * @throws ApiException
+     */
+    public function getTokenizedCustomer(string $customerId)
+    {
+        $uri = $this->getOpenApiUrl('v3', "/customer/$customerId");
+        return $this->mapResponse($this->callApi('get', $uri)->send());
+    }
+
 
     /**
      * Toggle customer status by Customer ID
